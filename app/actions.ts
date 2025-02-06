@@ -1,6 +1,6 @@
 "use server"
 
-const BREVO_API_KEY = "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"
+const BREVO_API_KEY = "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"
 
 export async function sendEmail(formData: FormData) {
   console.log('Starting sendEmail function')
