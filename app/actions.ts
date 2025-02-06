@@ -1,4 +1,5 @@
 "use server"
+console.log("BREVO_API_KEY in production:", process.env.BREVO_API_KEY ? "Loaded" : "Missing");
 
 const BREVO_API_KEY = "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"
 
