@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { sendEmail } from "@/app/actions"
 import { useScrollAnimation } from "@/utils/useScrollAnimation"
 
 export function Contact() {
@@ -32,6 +33,37 @@ export function Contact() {
     "Other"
   ]
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setIsSubmitting(true)
+    setSubmitStatus('idle')
+    setErrorMessage(null)
+
+    try {
+      if (!formRef.current) {
+        throw new Error('Form not found')
+      }
+
+      const formData = new FormData(formRef.current)
+      console.log('Submitting form data')
+      const result = await sendEmail(formData)
+      console.log('Received result:', result)
+
+      if (result.success) {
+        setSubmitStatus('success')
+        formRef.current.reset()
+      } else {
+        throw new Error(result.error || 'Failed to send message')
+      }
+    } catch (error) {
+      console.error('Error in handleSubmit:', error)
+      setSubmitStatus('error')
+      setErrorMessage(error instanceof Error ? error.message : 'An unexpected error occurred')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <section id="contact" className="py-20 sm:py-32">
       <div ref={ref} className={`container px-4 sm:px-6 lg:px-8 ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`}>
@@ -50,7 +82,7 @@ export function Contact() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form ref={formRef} className="space-y-4">
+              <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <Input name="firstName" placeholder="First Name" required />
                   <Input name="lastName" placeholder="Last Name" required />
