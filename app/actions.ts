@@ -1,4 +1,5 @@
-const BREVO_API_KEY = process.env.BREVO_API_KEY;
+const BREVO_API_KEY = process.env.const BREVO_API_KEY = process.env.NEXT_PUBLIC_BREVO_API_KEY;
+;
 
 if (!BREVO_API_KEY) {
   throw new Error("Missing BREVO_API_KEY environment variable");
